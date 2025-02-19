@@ -1,0 +1,52 @@
+version: '3.8'
+services:
+  postgresql1:
+    image: postgres:14.15-alpine3.21
+    container_name: postgresql1
+    environment:
+      POSTGRES_DB: person-client
+      POSTGRES_USER: usernttdata
+      POSTGRES_PASSWORD: password
+    ports:
+      - "5432:5432"
+    volumes:
+      - postgres1_data:/var/lib/postgresql/data
+
+  postgresql2:
+    image: postgres:14.15-alpine3.21
+    container_name: postgresql2
+    environment:
+      POSTGRES_DB: account-transaction
+      POSTGRES_USER: usernttdata
+      POSTGRES_PASSWORD: password
+    ports:
+      - "5432:5432"
+    volumes:
+      - postgres2_data:/var/lib/postgresql/data
+
+
+  nttdata-msa-person-client:
+    build:
+      context: ./nttdata-msa-person-client
+      dockerfile: Dockerfile
+    container_name: nttdata-msa-person-client
+    ports:
+      - "8080:8080"
+    depends_on:
+      - postgresql1
+
+  nttdata-msa-account-transaction:
+    build:
+      context: ./nttdata-msa-account-transaction
+      dockerfile: Dockerfile
+    container_name: nttdata-msa-account-transaction
+    ports:
+      - "8081:8081"
+    depends_on:
+      - postgresql2
+
+volumes:
+  postgres1_data:
+    driver: local
+  postgres2_data:
+    driver: local
