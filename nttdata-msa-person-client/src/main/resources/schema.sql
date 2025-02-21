@@ -1,9 +1,9 @@
 
-DROP TABLE IF EXISTS clientes;
-DROP TABLE IF EXISTS personas;
+DROP TABLE IF EXISTS clients;
+DROP TABLE IF EXISTS persons;
 
-CREATE TABLE personas (
-    personId SERIAL PRIMARY KEY,
+CREATE TABLE persons (
+    idPerson SERIAL PRIMARY KEY,
     name VARCHAR(100),
     gender VARCHAR(10),
     age INT,
@@ -12,9 +12,9 @@ CREATE TABLE personas (
     telephone VARCHAR(20)
 );
 
-CREATE TABLE clientes (
-    clientId SERIAL PRIMARY KEY,
+CREATE TABLE clients (
+    idClient SERIAL PRIMARY KEY,
     password VARCHAR(255),
     state BOOLEAN NOT NULL DEFAULT TRUE,
-    personId BIGINT REFERENCES personas(personId) ON DELETE CASCADE
+    idPerson BIGINT REFERENCES persons(idPerson) ON DELETE CASCADE
 );
