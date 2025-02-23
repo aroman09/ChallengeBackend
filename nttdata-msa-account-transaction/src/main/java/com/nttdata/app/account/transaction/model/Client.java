@@ -1,0 +1,15 @@
+package com.nttdata.app.account.transaction.model;
+
+import com.fasterxml.jackson.annotation.JsonProperty;
+import jakarta.validation.constraints.NotBlank;
+import lombok.Data;
+
+@Data
+public class Client {
+    @JsonProperty("idClient")
+    @NotBlank(message = "Debe enviar el id del cliente")
+    private Long id;
+    private String identification;
+    private String name;
+
+}
