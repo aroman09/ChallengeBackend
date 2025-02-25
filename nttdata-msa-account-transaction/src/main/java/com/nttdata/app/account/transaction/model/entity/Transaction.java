@@ -6,18 +6,22 @@ import org.springframework.data.relational.core.mapping.Column;
 import org.springframework.data.relational.core.mapping.Table;
 
 import java.sql.Timestamp;
+import java.time.LocalDateTime;
 
 @Data
 @Table("transactions")
 public class Transaction {
     @Id
-    @Column("idTransaction")
+    @Column("id_transaction")
     private Long transactionId;
-    private Timestamp dateTransaction;
+    @Column("date_transaction")
+    private LocalDateTime dateTransaction;
     private String type;
-    private Double mount;
+    private Double amount;
     private Double balance;
-    @Column("account")
-    private String account;
+    @Column("initial_balance")
+    private Double initialBalance;
+    @Column("id_account")
+    private Long account;
 
 }

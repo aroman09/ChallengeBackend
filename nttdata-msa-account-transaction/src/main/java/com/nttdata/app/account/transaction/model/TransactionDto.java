@@ -7,16 +7,17 @@ import jakarta.validation.constraints.Size;
 import lombok.Data;
 
 import java.sql.Timestamp;
+import java.time.LocalDateTime;
 
 @Data
 public class TransactionDto {
-    private Timestamp dateTransaction;
     @JsonProperty("typeTransaction")
     @NotBlank(message = "El parametro tipo movimiento no debe estar en blanco y debe ser DEBITO o CREDITO")
     private TransactionType type;
     @NotBlank(message = "El parametro valor no debe estar en blanco")
     private Double mount;
     private Double balance;
+    private Double initialBalance;
     @JsonProperty("accountNumber")
     @NotBlank(message = "El parametro cuenta no debe estar en blanco")
     @Size(max = 20, message = "El parametro cuenta debe tener maximo 20 caracteres")

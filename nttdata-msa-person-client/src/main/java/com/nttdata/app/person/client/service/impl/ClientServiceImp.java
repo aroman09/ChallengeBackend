@@ -11,6 +11,7 @@ import com.nttdata.app.person.client.repository.ClientRepository;
 import com.nttdata.app.person.client.service.ClientService;
 import com.nttdata.app.person.client.service.PersonService;
 import org.springframework.http.HttpStatus;
+import org.springframework.r2dbc.core.DatabaseClient;
 import org.springframework.stereotype.Service;
 import reactor.core.publisher.Flux;
 import reactor.core.publisher.Mono;
@@ -21,12 +22,15 @@ public class ClientServiceImp implements ClientService {
     private final ClientRepository clientRepository;
     private final PersonService personService;
     private final ClientMapper clientMapper;
+    private final DatabaseClient databaseClient;
 
     @Override
     public Flux<ClientDto> getAllClients() {
         return clientRepository.findAll()
+                .doOnNext(cliii -> System.out.println("repositorio cli "+cliii.getClientId()))
                 .flatMap(client ->
                         personService.getPersonById(client.getPersonId())
+                                .doOnNext(peer -> System.out.println(peer.getName()))
                                 .map(person -> clientMapper.toDTO(client, person))
                 );
     }

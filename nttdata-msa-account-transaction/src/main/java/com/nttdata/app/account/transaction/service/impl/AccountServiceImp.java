@@ -12,6 +12,7 @@ import com.nttdata.app.account.transaction.repository.AccountRepository;
 import com.nttdata.app.account.transaction.service.AccountService;
 import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
+import org.springframework.web.reactive.function.client.WebClientResponseException;
 import reactor.core.publisher.Flux;
 import reactor.core.publisher.Mono;
 @Service
@@ -27,11 +28,18 @@ public class AccountServiceImp implements AccountService {
     public Flux<AccountDto> getAllAccounts() {
         return accountRepository.findAll()
                 .flatMap(account -> getClient(account.getClientId())
-                                .map(client -> accountMapper.toDtoClient(account,client)));
+                                .map(client -> objectDto(account,client))
+                );
     }
 
-    public Mono<Client> getClient(Long idClient){
+    private Mono<Client> getClient(Long idClient){
         return clientService.getClientByAccount(idClient);
+    }
+
+    private AccountDto objectDto(Account account, Client client){
+        AccountDto accountDto = accountMapper.toDto(account);
+        accountDto.setClient(client);
+        return accountDto;
     }
 
     @Override
@@ -40,7 +48,17 @@ public class AccountServiceImp implements AccountService {
                 .switchIfEmpty( Mono.error(new ExceptionResponse(HttpStatus.NOT_FOUND,Message.ERROR_NOT_FOUND_ACCOUNT)))
                 .flatMap(account -> getClient(account.getClientId())
                         .map(client ->
-                             accountMapper.toDtoClient(account,client)
+                             objectDto(account,client)
+                        ));
+    }
+
+    @Override
+    public Mono<AccountDto> getAccountById(Long id) {
+        return accountRepository.findById(id)
+                .switchIfEmpty( Mono.error(new ExceptionResponse(HttpStatus.NOT_FOUND,Message.ERROR_NOT_FOUND_ACCOUNT)))
+                .flatMap(account -> getClient(account.getClientId())
+                        .map(client ->
+                                objectDto(account,client)
                         ));
     }
 
@@ -49,7 +67,7 @@ public class AccountServiceImp implements AccountService {
         return accountRepository.findAllByClientId(id)
                 .switchIfEmpty( Mono.error(new ExceptionResponse(HttpStatus.NOT_FOUND,Message.ERROR_NOT_FOUND_ACCOUNT)))
                 .flatMap(account -> getClient(account.getClientId())
-                        .map(client -> accountMapper.toDtoClient(account,client)));
+                        .map(client -> objectDto(account,client)));
     }
 
     @Override
@@ -57,22 +75,19 @@ public class AccountServiceImp implements AccountService {
         return getAccountExist(accountNumber)
                 .switchIfEmpty( Mono.error(new ExceptionResponse(HttpStatus.NOT_FOUND,Message.ERROR_NOT_FOUND_ACCOUNT)))
                 .flatMap(account -> getClient(account.getClientId())
-                        .map(client -> {
-                            return accountMapper.toDtoClient(account,client);
-                        }));
+                        .map(client -> objectDto(account,client)));
     }
 
     @Override
     public Mono<AccountDto> createAccount(AccountDto accountDTO) {
         Account account = accountMapper.toEntity(accountDTO);
-        return getAccountExist(account.getNumber())
-                .flatMap(
-                        existingAccount -> Mono.error(new ExceptionResponse(HttpStatus.CONFLICT, Message.ERROR_EXIST_ACCOUNT))
-                )
-                .cast(AccountDto.class)
-                .switchIfEmpty(
-                        accountRepository.save(account)
-                                .map(accountMapper::toDto)
+        return getClient(account.getClientId())
+                .onErrorResume(WebClientResponseException.class, ex -> Mono.error(new ExceptionResponse(HttpStatus.NOT_FOUND, "Cliente no encontrado")))
+                .flatMap( client -> getAccountExist(account.getNumber())
+                        .flatMap(existingAccount -> Mono.error(new ExceptionResponse(HttpStatus.CONFLICT, Message.ERROR_EXIST_ACCOUNT)))
+                        .switchIfEmpty(accountRepository.save(account))
+                        .cast(Account.class)
+                        .map(savedAccount -> objectDto(savedAccount,client))
                 );
     }
 
