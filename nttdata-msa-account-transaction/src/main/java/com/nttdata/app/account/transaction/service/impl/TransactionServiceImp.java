@@ -26,9 +26,9 @@ public class TransactionServiceImp implements TransactionService {
 
     @Override
     public Flux<TransactionClientResponse> getAllTransaction() {
-        return transactionRepository.findAll()
-                .flatMap(transaction -> accountService.getAccountByNumber(transaction.getAccount())
-                                .map(accountDto -> transactionMapper.toDTOResponse(transaction, accountDto))
+        return transactionRepository.findAllOrderByDateDesc()
+                .flatMap(transaction -> accountService.getAccountById(transaction.getAccount())
+                                .map(accountDto -> transactionMapper.toDTOResponse(transaction, accountDto, accountDto.getClient()))
                         );
     }
 
@@ -36,36 +36,35 @@ public class TransactionServiceImp implements TransactionService {
     public Flux<TransactionClientResponse> getAllTransactionByClient(Long idClient) {
         return accountService.getAccountByClient(idClient)
                 .flatMap(accountDto ->
-                            transactionRepository.findAllByAccountOrderByTransactionIdDesc(accountDto.getNumber())
+                            transactionRepository.findByAccountIdOrderByDateDesc(accountDto.getIdAccount())
                             .flatMap(transaction ->
                                     getTransactionById(transaction.getTransactionId()))
                 );
     }
 
     @Override
-    public Mono<TransactionClientResponse> getTransactionById(Long id) {
-        return transactionRepository.findById(id)
+    public Mono<TransactionClientResponse> getTransactionById(Long number) {
+        return transactionRepository.findById(number)
                 .switchIfEmpty( Mono.error(new ExceptionResponse(HttpStatus.NOT_FOUND, Message.ERROR_NOT_FOUND_TRANSACTION)))
-                .flatMap(transaction -> accountService.getAccountByNumber(transaction.getAccount())
-                    .map(accountDto -> transactionMapper.toDTOResponse(transaction, accountDto))
+                .flatMap(transaction -> accountService.getAccountById(transaction.getAccount())
+                    .map(accountDto -> transactionMapper.toDTOResponse(transaction, accountDto, accountDto.getClient()))
         );
     }
 
     @Override
     public Mono<TransactionClientResponse> createTransaction(TransactionDto transactionDTO) {
-        Transaction transaction = transactionMapper.toEntity(transactionDTO);
-        return accountService.getAccountByNumber(transaction.getAccount())
+        return accountService.getAccountByNumber(transactionDTO.getAccount())
                 .flatMap(account ->
-                            transactionRepository.findAllByAccountOrderByTransactionIdDesc(transactionDTO.getAccount())
+                            transactionRepository.findByAccountIdOrderByDateDesc(account.getIdAccount())
                                     .collectList()
                                     .flatMap(transactions -> {
-                                        if (transactions.isEmpty()) transactionDTO.setBalance(account.getInitialBalance());
-                                        else transactionDTO.setBalance(transactions.get(0).getBalance());
+                                        if (transactions.isEmpty()) transactionDTO.setInitialBalance(account.getInitialBalance());
+                                        else transactionDTO.setInitialBalance(transactions.get(0).getBalance());
                                         retrieveMount(transactionDTO);
                                         System.out.println(transactionDTO);
-                                        return transactionRepository.save(transactionMapper.toEntity(transactionDTO));
+                                        return transactionRepository.save(transactionMapper.toEntity(transactionDTO,account.getIdAccount()));
                                     })
-                                    .map(savedTransaction -> transactionMapper.toDTOResponse(savedTransaction,account))
+                                    .map(savedTransaction -> transactionMapper.toDTOResponse(savedTransaction,account, account.getClient()))
                         );
     }
 
@@ -80,12 +79,12 @@ public class TransactionServiceImp implements TransactionService {
         Double balance =0.0;
         if (TransactionType.RETIRO.equals(transactionDTO.getType()))
         {
-            balance = transactionDTO.getBalance() - Math.abs(transactionDTO.getMount());
-            if ( Math.abs(transactionDTO.getMount()) > transactionDTO.getBalance())
-                Mono.error(new ExceptionResponse(HttpStatus.NOT_ACCEPTABLE, "No existe saldo suficiente"));
+            if (Math.abs(transactionDTO.getMount()) >  transactionDTO.getInitialBalance() )
+                throw new ExceptionResponse(HttpStatus.NOT_ACCEPTABLE, "No existe saldo suficiente");
+            balance = transactionDTO.getInitialBalance() - Math.abs(transactionDTO.getMount());
         }
         else
-            balance = transactionDTO.getBalance()+ Math.abs(transactionDTO.getMount());
+            balance = transactionDTO.getInitialBalance()+ Math.abs(transactionDTO.getMount());
         transactionDTO.setBalance(balance);
     }
 

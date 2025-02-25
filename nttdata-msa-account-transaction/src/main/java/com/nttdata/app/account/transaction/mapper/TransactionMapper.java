@@ -11,29 +11,32 @@ import com.nttdata.app.account.transaction.model.TransactionDto;
 import com.nttdata.app.account.transaction.model.entity.Transaction;
 import org.mapstruct.Mappings;
 
+import java.lang.ref.Cleaner;
+
 @Mapper(componentModel = "spring")
 public interface TransactionMapper {
 
     @Mappings({
+            @Mapping(source = "transaction.transactionId", target = "idTransaction"),
             @Mapping(source = "transaction.dateTransaction", target = "dateTransaction"),
             @Mapping(source = "transaction.type", target = "typeTransaction"),
-            @Mapping(source = "transaction.mount", target = "mount"),
+            @Mapping(source = "transaction.amount", target = "mount"),
             @Mapping(source = "transaction.balance", target = "balance"),
-            @Mapping(source = "accountDto.client.name", target = "name"),
+            @Mapping(source = "transaction.initialBalance", target = "initialBalance"),
+            @Mapping(source = "client.name", target = "name"),
             @Mapping(source = "accountDto.number", target = "number"),
             @Mapping(source = "accountDto.type", target = "typeAccount"),
-            @Mapping(source = "accountDto.initialBalance", target = "initialBalance"),
             @Mapping(source = "accountDto.status", target = "status"),
     })
-    TransactionClientResponse toDTOResponse(Transaction transaction, AccountDto accountDto);
+    TransactionClientResponse toDTOResponse(Transaction transaction, AccountDto accountDto, Client client);
 
     @Mappings({
-            @Mapping(source = "transactionDto.dateTransaction", target = "dateTransaction"),
             @Mapping(source = "transactionDto.type", target = "type"),
-            @Mapping(source = "transactionDto.mount", target = "mount"),
+            @Mapping(source = "transactionDto.mount", target = "amount"),
             @Mapping(source = "transactionDto.balance", target = "balance"),
-            @Mapping(source = "transactionDto.account", target = "account"),
+            @Mapping(source = "transactionDto.initialBalance", target = "initialBalance"),
+            @Mapping(source = "account", target = "account"),
     })
-    Transaction toEntity(TransactionDto transactionDto);
+    Transaction toEntity(TransactionDto transactionDto, Long account);
 
 }

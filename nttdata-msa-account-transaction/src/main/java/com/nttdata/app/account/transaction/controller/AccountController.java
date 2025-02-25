@@ -1,6 +1,7 @@
 package com.nttdata.app.account.transaction.controller;
 
 
+import com.nttdata.app.account.transaction.model.entity.Account;
 import lombok.RequiredArgsConstructor;
 import com.nttdata.app.account.transaction.model.AccountDto;
 import com.nttdata.app.account.transaction.service.AccountService;
@@ -24,26 +25,26 @@ public class AccountController {
 
     @GetMapping("/{accountNumber}")
     @ResponseStatus(HttpStatus.OK)
-    public Mono<AccountDto> getAccountByNumber(@PathVariable String accountNumber) {
+    public Mono<AccountDto> getAccountByNumber(@PathVariable("accountNumber") String accountNumber) {
         return accountService.getAccountByNumber(accountNumber);
     }
 
     @PostMapping
     @ResponseStatus(HttpStatus.CREATED)
     public Mono<AccountDto> createAccount(@RequestBody AccountDto account) {
-        System.out.println("Received account: " + account);
-        return accountService.createAccount(account).cast(AccountDto.class);
+        Mono<AccountDto> accountDto = accountService.createAccount(account);
+        return accountService.createAccount(account);
     }
 
     @DeleteMapping("/{id}")
     @ResponseStatus(HttpStatus.NO_CONTENT)
-    public Mono<Void> deleteClient(@PathVariable Long id) {
+    public Mono<Void> delete(@PathVariable("id") Long id) {
         return accountService.deleteAccount(id);
     }
 
     @DeleteMapping("/number/{accountNumber}")
     @ResponseStatus(HttpStatus.NO_CONTENT)
-    public Mono<Void> deleteClient(@PathVariable String accountNumber) {
+    public Mono<Void> deleteAccount(@PathVariable("accountNumber") String accountNumber) {
         return accountService.deleteAccountNumber(accountNumber);
     }
 }

@@ -2,5 +2,5 @@ package com.nttdata.app.account.transaction.utils;
 
 public enum AccountType {
     AHORRO,
-    CREDITO
+    CORRIENTE
 }

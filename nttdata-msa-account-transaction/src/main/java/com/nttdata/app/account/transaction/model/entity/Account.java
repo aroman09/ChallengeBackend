@@ -9,12 +9,13 @@ import org.springframework.data.relational.core.mapping.Table;
 @Table("accounts")
 public class Account {
     @Id
-    @Column("idAccount")
+    @Column("id_account")
     private Long accountId;
-    @Column("idClient")
+    @Column("id_client")
     private Long clientId;
     private String number;
     private String type;
+    @Column("initial_balance")
     private Double initialBalance;
     private Boolean status;
 }

@@ -26,13 +26,13 @@ public class ClientController {
 
     @GetMapping("/identification/{identification}")
     @ResponseStatus(HttpStatus.OK)
-    public Mono<ClientDto> getClientByIdentification(@PathVariable String identification) {
+    public Mono<ClientDto> getClientByIdentification(@PathVariable("identification") String identification) {
         return clientService.getClientByIdentification(identification);
     }
 
     @GetMapping("/{id}")
     @ResponseStatus(HttpStatus.OK)
-    public Mono<ClientDto> getClientById(@PathVariable Long id) {
+    public Mono<ClientDto> getClientById(@PathVariable("id") Long id) {
         return clientService.getClientById(id);
     }
 

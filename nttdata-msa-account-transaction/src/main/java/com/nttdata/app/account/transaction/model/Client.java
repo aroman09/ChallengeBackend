@@ -6,9 +6,9 @@ import lombok.Data;
 
 @Data
 public class Client {
-    @JsonProperty("idClient")
+    @JsonProperty("clientId")
     @NotBlank(message = "Debe enviar el id del cliente")
-    private Long id;
+    private Long clientId;
     private String identification;
     private String name;
 

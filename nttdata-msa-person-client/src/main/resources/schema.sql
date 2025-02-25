@@ -1,9 +1,10 @@
-
+DROP TABLE IF EXISTS transactions;
+DROP TABLE IF EXISTS accounts;
 DROP TABLE IF EXISTS clients;
 DROP TABLE IF EXISTS persons;
 
 CREATE TABLE persons (
-    idPerson SERIAL PRIMARY KEY,
+    id_person SERIAL PRIMARY KEY,
     name VARCHAR(100),
     gender VARCHAR(10),
     age INT,
@@ -13,8 +14,8 @@ CREATE TABLE persons (
 );
 
 CREATE TABLE clients (
-    idClient SERIAL PRIMARY KEY,
-    password VARCHAR(255),
+    id_client SERIAL PRIMARY KEY,
+    password VARCHAR(30),
     state BOOLEAN NOT NULL DEFAULT TRUE,
-    idPerson BIGINT REFERENCES persons(idPerson) ON DELETE CASCADE
+    id_person BIGINT REFERENCES persons(id_person) ON DELETE CASCADE
 );

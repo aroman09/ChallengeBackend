@@ -94,7 +94,7 @@ public class GlobalExceptionHandler {
                 .build();
        return ResponseEntity.status(ex.getStatusCode()).body(error);
     }
-
+/*
     @ExceptionHandler(Exception.class)
     @ResponseStatus(HttpStatus.INTERNAL_SERVER_ERROR)
     public Error handleMethodExcepcion(Exception ex) {
@@ -104,5 +104,5 @@ public class GlobalExceptionHandler {
                 .details(ex.getMessage())
                 .build();
 
-    }
+    }*/
 }

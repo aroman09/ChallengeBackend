@@ -10,6 +10,7 @@ public interface AccountService {
     Flux<AccountDto> getAllAccounts();
     Flux<AccountDto> getAccountByClient(Long id);
     Mono<AccountDto> getAccountByNumber(String accountNumber) ;
+    Mono<AccountDto> getAccountById(Long id);
     Mono<AccountDto> getAccountClient(String accountNumber);
 
     Mono<AccountDto> createAccount(AccountDto account) ;
