@@ -1,29 +1,16 @@
 version: '3.8'
 services:
-  postgresql1:
-    image: postgres:14.15-alpine3.21
-    container_name: postgresql1
+  postgres-challenge:
+    image: postgres:15
+    restart: always
     environment:
-      POSTGRES_DB: person-client
-      POSTGRES_USER: usernttdata
+      POSTGRES_USER: admin
       POSTGRES_PASSWORD: password
-    ports:
-      - "5432:5432"
+      POSTGRES_DB: db_challenge
     volumes:
-      - postgres1_data:/var/lib/postgresql/data
-
-  postgresql2:
-    image: postgres:14.15-alpine3.21
-    container_name: postgresql2
-    environment:
-      POSTGRES_DB: account-transaction
-      POSTGRES_USER: usernttdata
-      POSTGRES_PASSWORD: password
+      - ./init-db.sql:/docker-entrypoint-initdb.d/init_db_challenge.sql
     ports:
-      - "5432:5432"
-    volumes:
-      - postgres2_data:/var/lib/postgresql/data
-
+      - "5433:5432"
 
   nttdata-msa-person-client:
     build:
@@ -33,7 +20,11 @@ services:
     ports:
       - "8080:8080"
     depends_on:
-      - postgresql1
+      - postgres-challenge
+    environment:
+      SPRING_DATASOURCE_URL: jdbc:postgres://postgres-challenge:5432/db_challenge
+      SPRING_DATASOURCE_USERNAME: admin
+      SPRING_DATASOURCE_PASSWORD: password
 
   nttdata-msa-account-transaction:
     build:
@@ -43,10 +34,10 @@ services:
     ports:
       - "8081:8081"
     depends_on:
-      - postgresql2
-
-volumes:
-  postgres1_data:
-    driver: local
-  postgres2_data:
-    driver: local
+      - postgres-challenge
+      - nttdata-msa-person-client
+    environment:
+      SPRING_DATASOURCE_URL: jdbc:postgres://postgres-challenge:5432/db_challenge
+      SPRING_DATASOURCE_USERNAME: admin
+      SPRING_DATASOURCE_PASSWORD: password
+      CLIENT_SERVICE_URL: http://nttdata-msa-person-client:8080

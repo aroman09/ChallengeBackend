@@ -5,52 +5,52 @@ import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import com.nttdata.app.person.client.service.ClientService;
 import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
 import reactor.core.publisher.Flux;
 import reactor.core.publisher.Mono;
 
+import java.net.URI;
+
 @RestController
-@RequestMapping("/app/person/client")
+@RequestMapping("/app/clients")
 @RequiredArgsConstructor
 @Validated
 public class ClientController {
 
     private final ClientService clientService;
+    private static final String BASE_URL = "/app/clients";
 
     @GetMapping
-    @ResponseStatus(HttpStatus.OK)
-    public Flux<ClientDto> getAllClients() {
-        return clientService.getAllClients();
+    public ResponseEntity<Flux<ClientDto>> getAllClients() {
+        return ResponseEntity.ok(clientService.getAllClients());
     }
 
     @GetMapping("/identification/{identification}")
-    @ResponseStatus(HttpStatus.OK)
-    public Mono<ClientDto> getClientByIdentification(@PathVariable("identification") String identification) {
-        return clientService.getClientByIdentification(identification);
+    public Mono<ResponseEntity<ClientDto>> getClientByIdentification(@PathVariable("identification") String identification) {
+        return clientService.getClientByIdentification(identification).map(ResponseEntity::ok);
     }
 
     @GetMapping("/{id}")
-    @ResponseStatus(HttpStatus.OK)
-    public Mono<ClientDto> getClientById(@PathVariable("id") Long id) {
-        return clientService.getClientById(id);
+    public Mono<ResponseEntity<ClientDto>> getClientById(@PathVariable("id") Long id) {
+        return clientService.getClientById(id).map(ResponseEntity::ok);
     }
 
     @PostMapping
-    @ResponseStatus(HttpStatus.CREATED)
-    public Mono<ClientDto>  createClient(@Valid @RequestBody ClientDto cliente) {
-        return clientService.createClient(cliente);
+    public Mono<ResponseEntity<ClientDto>>  createClient(@Valid @RequestBody ClientDto cliente) {
+        return clientService.createClient(cliente).map(createdClient -> ResponseEntity
+                .created(URI.create(BASE_URL + "/" + createdClient.getClientId()))
+                .body(createdClient));
     }
 
     @PutMapping
-    @ResponseStatus(HttpStatus.OK)
-    public Mono<ClientDto>  updateClient(@Valid @RequestBody ClientDto cliente) {
-        return clientService.updateClient(cliente);
+    public Mono<ResponseEntity<ClientDto>>  updateClient(@Valid @RequestBody ClientDto cliente) {
+        return clientService.updateClient(cliente).map(ResponseEntity::ok);
     }
 
     @DeleteMapping("/{id}")
-    @ResponseStatus(HttpStatus.NO_CONTENT)
-    public Mono<Void> deleteClient(@PathVariable Long id) {
-        return clientService.deleteClient(id);
+    public Mono<ResponseEntity<Void>> deleteClient(@PathVariable Long id) {
+        return clientService.deleteClient(id).thenReturn(ResponseEntity.noContent().build());
     }
 }

@@ -3,23 +3,18 @@ package com.nttdata.app.account.transaction.mapper;
 import com.nttdata.app.account.transaction.model.AccountDto;
 import com.nttdata.app.account.transaction.model.Client;
 import com.nttdata.app.account.transaction.model.TransactionClientResponse;
-import com.nttdata.app.account.transaction.model.entity.Account;
-import org.mapstruct.Mapper;
-import org.mapstruct.Mapping;
-import org.mapstruct.MappingTarget;
+import org.mapstruct.*;
 import com.nttdata.app.account.transaction.model.TransactionDto;
 import com.nttdata.app.account.transaction.model.entity.Transaction;
-import org.mapstruct.Mappings;
-
-import java.lang.ref.Cleaner;
+import java.time.LocalDate;
+import java.time.LocalDateTime;
 
 @Mapper(componentModel = "spring")
 public interface TransactionMapper {
 
     @Mappings({
             @Mapping(source = "transaction.transactionId", target = "idTransaction"),
-            @Mapping(source = "transaction.dateTransaction", target = "dateTransaction"),
-            @Mapping(source = "transaction.type", target = "typeTransaction"),
+            @Mapping(source = "transaction.dateTransaction", target = "dateTransaction", qualifiedByName = "convertToLocalDate"),
             @Mapping(source = "transaction.amount", target = "mount"),
             @Mapping(source = "transaction.balance", target = "balance"),
             @Mapping(source = "transaction.initialBalance", target = "initialBalance"),
@@ -39,4 +34,8 @@ public interface TransactionMapper {
     })
     Transaction toEntity(TransactionDto transactionDto, Long account);
 
+    @Named("convertToLocalDate")
+    default LocalDate formatDate(LocalDateTime date) {
+        return (date != null) ? date.toLocalDate() : null;
+    }
 }

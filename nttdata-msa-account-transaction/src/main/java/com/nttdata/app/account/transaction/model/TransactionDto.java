@@ -6,8 +6,6 @@ import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.Size;
 import lombok.Data;
 
-import java.sql.Timestamp;
-import java.time.LocalDateTime;
 
 @Data
 public class TransactionDto {

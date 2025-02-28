@@ -65,7 +65,6 @@ public class AccountServiceImp implements AccountService {
     @Override
     public Flux<AccountDto> getAccountByClient(Long id) {
         return accountRepository.findAllByClientId(id)
-                .switchIfEmpty( Mono.error(new ExceptionResponse(HttpStatus.NOT_FOUND,Message.ERROR_NOT_FOUND_ACCOUNT)))
                 .flatMap(account -> getClient(account.getClientId())
                         .map(client -> objectDto(account,client)));
     }

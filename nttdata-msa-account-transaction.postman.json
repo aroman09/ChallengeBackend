@@ -1,0 +1,448 @@
+{
+	"info": {
+		"_postman_id": "068aa682-0e22-465e-983a-0053c4eada59",
+		"name": "nttdata-msa-account-transaction",
+		"schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json",
+		"_exporter_id": "8618363"
+	},
+	"item": [
+		{
+			"name": "Crear Movimiento",
+			"request": {
+				"method": "POST",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "{\r\n    \"mount\": \"10\",\r\n    \"accountNumber\": \"78456789\"\r\n}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "http://localhost:8086/app/transactions",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "8086",
+					"path": [
+						"app",
+						"transactions"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Listar Movimientos Cuenta",
+			"request": {
+				"method": "GET",
+				"header": [],
+				"url": {
+					"raw": "http://localhost:8084/api/movimientos/cuenta?cuenta=123456789",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "8084",
+					"path": [
+						"api",
+						"movimientos",
+						"cuenta"
+					],
+					"query": [
+						{
+							"key": "cuenta",
+							"value": "123456789"
+						}
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Listar Movimientos",
+			"request": {
+				"method": "GET",
+				"header": [],
+				"url": {
+					"raw": "http://localhost:8086/app/transactions",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "8086",
+					"path": [
+						"app",
+						"transactions"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Listar Movimientos Por Cliente",
+			"request": {
+				"method": "GET",
+				"header": [],
+				"url": {
+					"raw": "http://localhost:8086/app/transactions/client/:idClient",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "8086",
+					"path": [
+						"app",
+						"transactions",
+						"client",
+						":idClient"
+					],
+					"variable": [
+						{
+							"key": "idClient",
+							"value": "1"
+						}
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Listar Cuenta Por Numero de Cuenta",
+			"protocolProfileBehavior": {
+				"disableBodyPruning": true
+			},
+			"request": {
+				"method": "GET",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "http://localhost:8086/app/accounts/number/:accountNumber",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "8086",
+					"path": [
+						"app",
+						"accounts",
+						"number",
+						":accountNumber"
+					],
+					"variable": [
+						{
+							"key": "accountNumber",
+							"value": "78456780"
+						}
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Listar Cuenta Por Id",
+			"protocolProfileBehavior": {
+				"disableBodyPruning": true
+			},
+			"request": {
+				"method": "GET",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "http://localhost:8086/app/accounts/:id",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "8086",
+					"path": [
+						"app",
+						"accounts",
+						":id"
+					],
+					"variable": [
+						{
+							"key": "id",
+							"value": "1"
+						}
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Listar Cuentas",
+			"request": {
+				"method": "GET",
+				"header": [],
+				"url": {
+					"raw": "http://localhost:8086/app/account",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "8086",
+					"path": [
+						"app",
+						"account"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Reporte Fechas",
+			"request": {
+				"method": "GET",
+				"header": [],
+				"url": {
+					"raw": "http://localhost:8086/app/reports?startDate=2025-02-20&endDate=2025-02-26&idClient=1",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "8086",
+					"path": [
+						"app",
+						"reports"
+					],
+					"query": [
+						{
+							"key": "startDate",
+							"value": "2025-02-20"
+						},
+						{
+							"key": "endDate",
+							"value": "2025-02-26"
+						},
+						{
+							"key": "idClient",
+							"value": "1"
+						}
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Reporte Fechas PDF",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"exec": [
+							"var template = `\r",
+							"<style type=\"text/css\">\r",
+							"    .tftable {font-size:14px;color:#333333;width:100%;border-width: 1px;border-color: #87ceeb;border-collapse: collapse;}\r",
+							"    .tftable th {font-size:18px;background-color:#87ceeb;border-width: 1px;padding: 8px;border-style: solid;border-color: #87ceeb;text-align:left;}\r",
+							"    .tftable tr {background-color:#ffffff;}\r",
+							"    .tftable td {font-size:14px;border-width: 1px;padding: 8px;border-style: solid;border-color: #87ceeb;}\r",
+							"    .tftable tr:hover {background-color:#e0ffff;}\r",
+							"</style>\r",
+							"\r",
+							"<table class=\"tftable\" border=\"1\">\r",
+							"    <tr>\r",
+							"        <th>Response</th>\r",
+							"    </tr>\r",
+							"    <tr>\r",
+							"        <td>No data available for visualization</td>\r",
+							"    </tr>\r",
+							"</table>\r",
+							"`;\r",
+							"\r",
+							"function constructVisualizerPayload() {\r",
+							"    return { response: \"No data available for visualization\" }\r",
+							"}\r",
+							"\r",
+							"pm.visualizer.set(template, constructVisualizerPayload());"
+						],
+						"type": "text/javascript",
+						"packages": {}
+					}
+				}
+			],
+			"request": {
+				"method": "GET",
+				"header": [],
+				"url": {
+					"raw": "http://localhost:8086/app/reports/pdf?startDate=2025-02-20&endDate=2025-02-26&idClient=1",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "8086",
+					"path": [
+						"app",
+						"reports",
+						"pdf"
+					],
+					"query": [
+						{
+							"key": "startDate",
+							"value": "2025-02-20"
+						},
+						{
+							"key": "endDate",
+							"value": "2025-02-26"
+						},
+						{
+							"key": "idClient",
+							"value": "1"
+						}
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Crear Cuenta",
+			"request": {
+				"method": "POST",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "{\r\n    \"numberAccount\": \"78456780\",\r\n    \"typeAccount\": \"AHORRO\",\r\n    \"initialBalance\": 50,\r\n    \"status\": true,\r\n    \"client\":{\r\n        \"clientId\": 1\r\n    }\r\n}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "http://localhost:8086/app/accounts",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "8086",
+					"path": [
+						"app",
+						"accounts"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Actualizar Cuenta",
+			"request": {
+				"method": "POST",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "{\r\n    \"idAccount\": \"1\",\r\n    \"numberAccount\": \"78456780\",\r\n    \"typeAccount\": \"AHORRO\",\r\n    \"initialBalance\": 50,\r\n    \"status\": true,\r\n    \"client\":{\r\n        \"clientId\": 1\r\n    }\r\n}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "http://localhost:8086/app/accounts",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "8086",
+					"path": [
+						"app",
+						"accounts"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Eliminar Cuenta",
+			"request": {
+				"method": "DELETE",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "http://localhost:8086/app/accounts/:id",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "8086",
+					"path": [
+						"app",
+						"accounts",
+						":id"
+					],
+					"variable": [
+						{
+							"key": "id",
+							"value": "1"
+						}
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Eliminar cuenta por numero de cuenta",
+			"request": {
+				"method": "DELETE",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "http://localhost:8086/app/accounts/number/:accountNumber",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "8086",
+					"path": [
+						"app",
+						"accounts",
+						"number",
+						":accountNumber"
+					],
+					"variable": [
+						{
+							"key": "accountNumber",
+							"value": "78456789"
+						}
+					]
+				}
+			},
+			"response": []
+		}
+	]
+}
