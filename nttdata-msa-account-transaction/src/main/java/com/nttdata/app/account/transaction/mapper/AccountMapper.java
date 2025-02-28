@@ -1,6 +1,5 @@
 package com.nttdata.app.account.transaction.mapper;
 
-import com.nttdata.app.account.transaction.model.Client;
 import org.mapstruct.*;
 import com.nttdata.app.account.transaction.model.AccountDto;
 import com.nttdata.app.account.transaction.model.entity.Account;
@@ -27,14 +26,9 @@ public interface AccountMapper {
     })
     AccountDto toDto(Account account);
 
- @Mappings({
-         @Mapping(source = "account.accountId", target = "idAccount"),
-         @Mapping(source = "account.number", target = "number"),
-         @Mapping(source = "account.type", target = "type"),
-         @Mapping(source = "account.initialBalance", target = "initialBalance"),
-         @Mapping(source = "account.status", target = "status"),
- })
- AccountDto toDto2(Account account);
 @Mapping(target = "accountId", ignore = true)
+@Mapping(target = "clientId", ignore = true)
+@Mapping(target = "number", ignore = true)
+@Mapping(target = "initialBalance", ignore = true)
 void updateAccountFromDTO(AccountDto accountDTO, @MappingTarget Account account);
 }

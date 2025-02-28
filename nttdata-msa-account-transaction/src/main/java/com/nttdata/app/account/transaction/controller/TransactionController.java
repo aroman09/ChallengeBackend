@@ -1,51 +1,52 @@
 package com.nttdata.app.account.transaction.controller;
 
+
 import com.nttdata.app.account.transaction.model.TransactionClientResponse;
 import com.nttdata.app.account.transaction.model.TransactionDto;
 import com.nttdata.app.account.transaction.service.TransactionService;
 import lombok.RequiredArgsConstructor;
-import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
 import reactor.core.publisher.Flux;
 import reactor.core.publisher.Mono;
 
+import java.net.URI;
+
 @RestController
-@RequestMapping("/app/transaction")
+@RequestMapping("/app/transactions")
 @RequiredArgsConstructor
 @Validated
 public class TransactionController {
 
     private final TransactionService transactionService;
+    private static final String BASE_URL = "/app/transactions";
 
     @GetMapping
-    @ResponseStatus(HttpStatus.OK)
-    public Flux<TransactionClientResponse> getAllTransaction() {
-        return transactionService.getAllTransaction();
+    public ResponseEntity<Flux<TransactionClientResponse>> getAllTransaction() {
+        return ResponseEntity.ok(transactionService.getAllTransaction());
     }
 
     @GetMapping("/client/{idClient}")
-    @ResponseStatus(HttpStatus.OK)
     public Flux<TransactionClientResponse> getAllTransactionByClient(@PathVariable Long idClient) {
         return transactionService.getAllTransactionByClient(idClient);
     }
 
     @GetMapping("/{id}")
-    @ResponseStatus(HttpStatus.OK)
-    public Mono<TransactionClientResponse> getTransactionById(@PathVariable Long id) {
-        return transactionService.getTransactionById(id);
+    public Mono<ResponseEntity<TransactionClientResponse>> getTransactionById(@PathVariable Long id) {
+        return transactionService.getTransactionById(id).map(ResponseEntity::ok);
     }
 
     @PostMapping
-    @ResponseStatus(HttpStatus.CREATED)
-    public Mono<TransactionClientResponse> createTransaction(@RequestBody TransactionDto transactionDTO) {
-        System.out.println("Received client: " + transactionDTO);
-        return transactionService.createTransaction(transactionDTO);
+    public Mono<ResponseEntity<TransactionClientResponse>> createTransaction(@RequestBody TransactionDto transactionDTO) {
+        return transactionService.createTransaction(transactionDTO)
+                .map(createdTransaction -> ResponseEntity
+                        .created(URI.create(BASE_URL + "/" + createdTransaction.getIdTransaction()))
+                        .body(createdTransaction));
     }
 
     @DeleteMapping("/{id}")
-    @ResponseStatus(HttpStatus.NO_CONTENT)
-    public Mono<Void> deleteTransaction(@PathVariable Long id) {
-        return transactionService.deleteTransaction(id);
+    public Mono<ResponseEntity<Void>> deleteTransaction(@PathVariable Long id) {
+        return transactionService.deleteTransaction(id).thenReturn(ResponseEntity.noContent().build());
     }
 }

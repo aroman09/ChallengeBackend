@@ -27,7 +27,7 @@ public class GlobalExceptionHandler {
                         "message", error.getDefaultMessage()
                 ))
                 .collect(Collectors.toList());
-        return new Error().builder()
+        return Error.builder()
                 .code("990")
                 .message("Parametro no cumple condiciones validas")
                 .details(details)
@@ -37,7 +37,7 @@ public class GlobalExceptionHandler {
     @ExceptionHandler(DataAccessException.class)
     @ResponseStatus(HttpStatus.SERVICE_UNAVAILABLE)
     public Error handleGeneralDatabase(DataAccessException ex) {
-        return new Error().builder()
+        return Error.builder()
                 .code("991")
                 .message("Error en base de datos")
                 .details(ex.getMessage())
@@ -47,7 +47,7 @@ public class GlobalExceptionHandler {
     @ExceptionHandler(IllegalArgumentException.class)
     @ResponseStatus(HttpStatus.BAD_REQUEST)
     public Error handleIllegalArgument(IllegalArgumentException ex) {
-        return new Error().builder()
+        return Error.builder()
                 .code("992")
                 .message("Entrada invalida")
                 .details(ex.getMessage())
@@ -57,7 +57,7 @@ public class GlobalExceptionHandler {
     @ExceptionHandler(JsonProcessingException.class)
     @ResponseStatus(HttpStatus.BAD_REQUEST)
     public Error handleJsonProcessingException(JsonProcessingException ex) {
-        return new Error().builder()
+        return Error.builder()
                 .code("993")
                 .message("Hubo un error al deserializar el JSON")
                 .details(ex.getMessage())
@@ -67,7 +67,7 @@ public class GlobalExceptionHandler {
     @ExceptionHandler(IOException.class)
     @ResponseStatus(HttpStatus.BAD_REQUEST)
     public Error handleIOException(IOException ex) {
-        return new Error().builder()
+        return Error.builder()
                 .code("994")
                 .message("Hubo un problema al procesar la entrada/salida de datos")
                 .details(ex.getMessage())
@@ -76,7 +76,7 @@ public class GlobalExceptionHandler {
 
     @ExceptionHandler(ExceptionResponse.class)
     public ResponseEntity<Error> handleRuntimeException(ExceptionResponse ex) {
-        Error error = new Error().builder()
+        Error error = Error.builder()
                 .code("994")
                 .message(ex.getMessage())
                 .details(ex.getMessage())
@@ -87,17 +87,17 @@ public class GlobalExceptionHandler {
     @ExceptionHandler(MethodNotAllowedException.class)
     @ResponseStatus(HttpStatus.METHOD_NOT_ALLOWED)
     public Error handleMethodNotAllowed(MethodNotAllowedException ex) {
-        return new Error().builder()
+        return Error.builder()
                 .code("999")
                 .message("Metodo no permitido")
-                .details("Metodo no permitido")
+                .details(ex.getMessage())
                 .build();
     }
 
     @ExceptionHandler(Exception.class)
     @ResponseStatus(HttpStatus.INTERNAL_SERVER_ERROR)
     public Error handleMethodExcepcion(Exception ex) {
-        return new Error().builder()
+        return Error.builder()
                 .code("999")
                 .message("Ha ocurrido un error inesperado")
                 .details(ex.getMessage())

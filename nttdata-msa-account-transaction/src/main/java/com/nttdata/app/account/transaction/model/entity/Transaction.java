@@ -5,7 +5,6 @@ import org.springframework.data.annotation.Id;
 import org.springframework.data.relational.core.mapping.Column;
 import org.springframework.data.relational.core.mapping.Table;
 
-import java.sql.Timestamp;
 import java.time.LocalDateTime;
 
 @Data
@@ -15,7 +14,7 @@ public class Transaction {
     @Column("id_transaction")
     private Long transactionId;
     @Column("date_transaction")
-    private LocalDateTime dateTransaction;
+    private LocalDateTime dateTransaction = LocalDateTime.now();
     private String type;
     private Double amount;
     private Double balance;

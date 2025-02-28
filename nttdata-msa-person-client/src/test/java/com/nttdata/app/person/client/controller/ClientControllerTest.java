@@ -3,6 +3,7 @@ package com.nttdata.app.person.client.controller;
 import com.nttdata.app.person.client.model.ClientDto;
 import com.nttdata.app.person.client.service.ClientService;
 import org.junit.jupiter.api.BeforeAll;
+import org.springframework.http.ResponseEntity;
 import reactor.core.publisher.Mono;
 import reactor.test.StepVerifier;
 import org.junit.jupiter.api.Test;
@@ -11,6 +12,8 @@ import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.springframework.test.context.junit.jupiter.SpringExtension;
 import reactor.core.publisher.Flux;
+
+import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.mockito.ArgumentMatchers.*;
 import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.when;
@@ -40,9 +43,9 @@ class ClientControllerTest {
     void getAllClients() {
         when(clientService.getAllClients()).thenReturn(Flux.just(clientDto));
 
-        Flux<ClientDto> responseGet = clientController.getAllClients();
+        ResponseEntity<Flux<ClientDto>> responseEntity = clientController.getAllClients();
 
-        StepVerifier.create(responseGet)
+        StepVerifier.create(responseEntity.getBody())
                 .expectNext(clientDto)
                 .verifyComplete();
         verify(clientService).getAllClients();
@@ -51,9 +54,12 @@ class ClientControllerTest {
     @Test
     void getClientByIdentification() {
         when(clientService.getClientByIdentification("1234567890")).thenReturn(Mono.just(clientDto));
-        StepVerifier.FirstStep<ClientDto> client = StepVerifier.create(clientController.getClientByIdentification("1234567890"));
-        client.expectNext(clientDto);
-        client.expectComplete().verify();
+        StepVerifier.create(clientController.getClientByIdentification("1234567890"))
+                .assertNext(response -> {
+                    assertEquals(200, response.getStatusCodeValue());
+                    assertEquals(clientDto, response.getBody());
+                })
+                .verifyComplete();
 
         verify(clientService).getClientByIdentification("1234567890");
     }
@@ -62,8 +68,11 @@ class ClientControllerTest {
     void createClient() {
         when(clientService.createClient(any())).thenReturn(Mono.just(clientDto));
 
-        StepVerifier.create(clientController.createClient(any()))
-                .expectNext(clientDto)
+        StepVerifier.create(clientController.createClient(clientDto))
+                .assertNext(response -> {
+                    assertEquals(201, response.getStatusCodeValue());
+                    assertEquals(clientDto, response.getBody());
+                })
                 .verifyComplete();
 
         verify(clientService).createClient(any());
@@ -72,9 +81,9 @@ class ClientControllerTest {
     @Test
     void deleteClient() {
         when(clientService.deleteClient(clientDto.getClientId())).thenReturn(Mono.empty());
-        StepVerifier.create(clientService.deleteClient(clientDto.getClientId()))
+        StepVerifier.create(clientController.deleteClient(clientDto.getClientId()))
+                .assertNext(response -> assertEquals(204, response.getStatusCodeValue()))
                 .verifyComplete();
-
         verify(clientService).deleteClient(any());
     }
 }

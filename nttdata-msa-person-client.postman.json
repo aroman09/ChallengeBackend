@@ -42,7 +42,7 @@
 				"header": [],
 				"body": {
 					"mode": "raw",
-					"raw": "{\r\n    \"name\": \"Julia Luisa Roldos\",\r\n    \"gender\": \"F\",\r\n    \"age\":25,\r\n    \"identification\": \"1105368889\",\r\n    \"direction\": \"Calle98586\",\r\n    \"telephone\": \"555-1274\",\r\n    \"password\": \"022466789\",\r\n    \"state\": true\r\n}",
+					"raw": "{\r\n    \"name\": \"Julia Luisa Roldos\",\r\n    \"gender\": \"F\",\r\n    \"age\":25,\r\n    \"identification\": \"1197068888\",\r\n    \"direction\": \"Calle98586\",\r\n    \"telephone\": \"555-1274\",\r\n    \"password\": \"022466789\",\r\n    \"state\": true\r\n}",
 					"options": {
 						"raw": {
 							"language": "json"
@@ -50,15 +50,16 @@
 					}
 				},
 				"url": {
-					"raw": "http://localhost:8085/api/clientes",
+					"raw": "http://localhost:8085/app/person/client",
 					"protocol": "http",
 					"host": [
 						"localhost"
 					],
 					"port": "8085",
 					"path": [
-						"api",
-						"clientes"
+						"app",
+						"person",
+						"client"
 					]
 				}
 			},
@@ -82,7 +83,7 @@
 					}
 				},
 				"url": {
-					"raw": "http://localhost:8085/app/person/client/identification/:identification",
+					"raw": "http://localhost:8085/app/person/client/:id",
 					"protocol": "http",
 					"host": [
 						"localhost"
@@ -92,13 +93,12 @@
 						"app",
 						"person",
 						"client",
-						"identification",
-						":identification"
+						":id"
 					],
 					"variable": [
 						{
-							"key": "identification",
-							"value": "1105368889"
+							"key": "id",
+							"value": "1"
 						}
 					]
 				}
@@ -147,6 +147,47 @@
 			"response": []
 		},
 		{
+			"name": "Recuperar Clientes id",
+			"protocolProfileBehavior": {
+				"disableBodyPruning": true
+			},
+			"request": {
+				"method": "GET",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "http://localhost:8085/app/person/client/identification/:identification",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "8085",
+					"path": [
+						"app",
+						"person",
+						"client",
+						"identification",
+						":identification"
+					],
+					"variable": [
+						{
+							"key": "identification",
+							"value": "1197068888"
+						}
+					]
+				}
+			},
+			"response": []
+		},
+		{
 			"name": "Recuperar Clientes",
 			"protocolProfileBehavior": {
 				"disableBodyPruning": true
@@ -164,15 +205,16 @@
 					}
 				},
 				"url": {
-					"raw": "http://localhost:8083/api/clientes",
+					"raw": "http://localhost:8085/app/person/client",
 					"protocol": "http",
 					"host": [
 						"localhost"
 					],
-					"port": "8083",
+					"port": "8085",
 					"path": [
-						"api",
-						"clientes"
+						"app",
+						"person",
+						"client"
 					]
 				}
 			},
