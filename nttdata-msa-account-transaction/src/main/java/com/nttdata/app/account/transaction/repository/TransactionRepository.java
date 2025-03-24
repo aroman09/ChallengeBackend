@@ -11,7 +11,8 @@ import java.time.LocalDateTime;
 @Repository
 public interface TransactionRepository extends ReactiveCrudRepository<Transaction,Long> {
 
-    @Query("SELECT * FROM transactions m WHERE m.date_transaction BETWEEN :startDate AND :endDate AND m.id_account = :accountId")
+    @Query("SELECT * FROM transactions m WHERE m.date_transaction BETWEEN :startDate AND :endDate AND m.id_account = :accountId " +
+            "order by m.date_transaction asc")
     Flux<Transaction> findTransactionsByDateAndAccountNumber(
             @Param("startDate") LocalDateTime fechaInicio,
             @Param("endDate") LocalDateTime fechaFin,

@@ -3,12 +3,14 @@ services:
   postgres-challenge:
     image: postgres:15
     restart: always
+    container_name: postgres-challenge
     environment:
       POSTGRES_USER: admin
       POSTGRES_PASSWORD: password
       POSTGRES_DB: db_challenge
     volumes:
-      - ./init-db.sql:/docker-entrypoint-initdb.d/init_db_challenge.sql
+      - pgdata:/var/lib/postgresql/data
+      - ./init_db_challenge.sql:/docker-entrypoint-initdb.d/init_db_challenge.sql
     ports:
       - "5433:5432"
 
@@ -22,7 +24,7 @@ services:
     depends_on:
       - postgres-challenge
     environment:
-      SPRING_DATASOURCE_URL: jdbc:postgres://postgres-challenge:5432/db_challenge
+      SPRING_DATASOURCE_URL: r2dbc:postgresql://postgres-challenge:5432/db_challenge
       SPRING_DATASOURCE_USERNAME: admin
       SPRING_DATASOURCE_PASSWORD: password
 
@@ -37,7 +39,10 @@ services:
       - postgres-challenge
       - nttdata-msa-person-client
     environment:
-      SPRING_DATASOURCE_URL: jdbc:postgres://postgres-challenge:5432/db_challenge
+      SPRING_DATASOURCE_URL: r2dbc:postgresql://postgres-challenge:5432/db_challenge
       SPRING_DATASOURCE_USERNAME: admin
       SPRING_DATASOURCE_PASSWORD: password
       CLIENT_SERVICE_URL: http://nttdata-msa-person-client:8080
+
+volumes:
+  pgdata:

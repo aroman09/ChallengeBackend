@@ -11,6 +11,7 @@ public interface TransactionService {
     Flux<TransactionClientResponse> getAllTransaction();
     Flux<TransactionClientResponse> getAllTransactionByDates(LocalDateTime startDate, LocalDateTime endDate, Long idClient);
     Flux<TransactionClientResponse> getAllTransactionByClient(Long idClient);
+    Flux<TransactionClientResponse> getAllTransactionByAccount(String account);
 
     Mono<TransactionClientResponse> getTransactionById(Long id) ;
 

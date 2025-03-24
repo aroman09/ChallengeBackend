@@ -57,6 +57,16 @@ public class TransactionServiceImp implements TransactionService {
     }
 
     @Override
+    public Flux<TransactionClientResponse> getAllTransactionByAccount(String account) {
+        return accountService.getAccountByNumber(account)
+                .switchIfEmpty( Mono.error(new ExceptionResponse(HttpStatus.NOT_FOUND,Message.ERROR_NOT_FOUND_ACCOUNT)))
+                .flatMapMany(accountDto ->
+                        transactionRepository.findByAccountIdOrderByDateDesc(accountDto.getIdAccount())
+                                .map(transaction -> transactionMapper.toDTOResponse(transaction, accountDto, accountDto.getClient()))
+                );
+    }
+
+    @Override
     public Mono<TransactionClientResponse> getTransactionById(Long number) {
         return transactionRepository.findById(number)
                 .switchIfEmpty( Mono.error(new ExceptionResponse(HttpStatus.NOT_FOUND, Message.ERROR_NOT_FOUND_TRANSACTION)))

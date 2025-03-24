@@ -1,4 +1,4 @@
-package com.nttdata.app.account.transaction.exception;
+package com.nttdata.app.account.transaction.model;
 
 import lombok.Builder;
 import lombok.Data;

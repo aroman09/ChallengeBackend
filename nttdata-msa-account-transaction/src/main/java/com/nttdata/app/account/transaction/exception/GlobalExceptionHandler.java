@@ -1,6 +1,7 @@
 package com.nttdata.app.account.transaction.exception;
 
 import com.fasterxml.jackson.core.JsonProcessingException;
+import com.nttdata.app.account.transaction.model.Error;
 import org.springframework.dao.DataAccessException;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;

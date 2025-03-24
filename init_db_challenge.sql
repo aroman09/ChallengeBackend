@@ -1,6 +1,3 @@
-CREATE DATABASE db_challenge;
-\c db_challenge;
-
 CREATE TABLE persons (
     id_person SERIAL PRIMARY KEY,
     name VARCHAR(100),
@@ -23,7 +20,7 @@ CREATE TABLE accounts (
     id_account SERIAL PRIMARY KEY,
     number VARCHAR(20) NOT NULL UNIQUE, 
     type VARCHAR(10) NOT NULL, 
-
+    initial_balance DOUBLE PRECISION NOT NULL,
     status BOOLEAN NOT NULL DEFAULT TRUE,
     id_client BIGINT NOT NULL,
     CONSTRAINT fk_client FOREIGN KEY (id_client) REFERENCES clients(id_client) ON DELETE CASCADE
