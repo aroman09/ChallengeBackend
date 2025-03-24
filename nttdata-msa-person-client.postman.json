@@ -13,7 +13,7 @@
 				"header": [],
 				"body": {
 					"mode": "raw",
-					"raw": "{\r\n    \"id\":1,\r\n    \"nombre\": \"Julia Luisa Roldos\",\r\n    \"genero\": \"F\",\r\n    \"edad\":25,\r\n    \"identificacion\": \"1105368889\",\r\n    \"direccion\": \"Calle av Loja\",\r\n    \"telefono\": \"555-1274\",\r\n    \"password\": \"022466789\",\r\n    \"clientId\":\"jluro\",\r\n    \"estado\": true\r\n}",
+					"raw": "{\r\n    \"id\":1,\r\n    \"name\": \"Julia Luisa Roldos\",\r\n    \"gender\": \"F\",\r\n    \"age\":25,\r\n    \"identification\": \"1105368889\",\r\n    \"direction\": \"Cuenca\",\r\n    \"telephone\": \"555-1274\",\r\n    \"password\": \"022466789\",\r\n    \"state\": true\r\n}",
 					"options": {
 						"raw": {
 							"language": "json"
@@ -21,15 +21,16 @@
 					}
 				},
 				"url": {
-					"raw": "http://localhost:8083/api/clientes",
+					"raw": "http://localhost:8085/app/person/client",
 					"protocol": "http",
 					"host": [
 						"localhost"
 					],
-					"port": "8083",
+					"port": "8085",
 					"path": [
-						"api",
-						"clientes"
+						"app",
+						"person",
+						"client"
 					]
 				}
 			},
@@ -42,7 +43,7 @@
 				"header": [],
 				"body": {
 					"mode": "raw",
-					"raw": "{\r\n    \"name\": \"Julia Luisa Roldos\",\r\n    \"gender\": \"F\",\r\n    \"age\":25,\r\n    \"identification\": \"1197068888\",\r\n    \"direction\": \"Calle98586\",\r\n    \"telephone\": \"555-1274\",\r\n    \"password\": \"022466789\",\r\n    \"state\": true\r\n}",
+					"raw": "{\r\n    \"name\": \"Julia Luisa Roldos\",\r\n    \"gender\": \"F\",\r\n    \"age\":25,\r\n    \"identification\": \"1105368889\",\r\n    \"direction\": \"Calle98586\",\r\n    \"telephone\": \"555-1274\",\r\n    \"password\": \"022466789\",\r\n    \"state\": true\r\n}",
 					"options": {
 						"raw": {
 							"language": "json"
@@ -123,64 +124,21 @@
 					}
 				},
 				"url": {
-					"raw": "http://localhost:8085/app/person/client/identification/:identification",
+					"raw": "http://localhost:8080/app/clients/:id",
 					"protocol": "http",
 					"host": [
 						"localhost"
 					],
-					"port": "8085",
+					"port": "8080",
 					"path": [
 						"app",
-						"person",
-						"client",
-						"identification",
-						":identification"
+						"clients",
+						":id"
 					],
 					"variable": [
 						{
-							"key": "identification",
-							"value": "1105368889"
-						}
-					]
-				}
-			},
-			"response": []
-		},
-		{
-			"name": "Recuperar Clientes id",
-			"protocolProfileBehavior": {
-				"disableBodyPruning": true
-			},
-			"request": {
-				"method": "GET",
-				"header": [],
-				"body": {
-					"mode": "raw",
-					"raw": "",
-					"options": {
-						"raw": {
-							"language": "json"
-						}
-					}
-				},
-				"url": {
-					"raw": "http://localhost:8085/app/person/client/identification/:identification",
-					"protocol": "http",
-					"host": [
-						"localhost"
-					],
-					"port": "8085",
-					"path": [
-						"app",
-						"person",
-						"client",
-						"identification",
-						":identification"
-					],
-					"variable": [
-						{
-							"key": "identification",
-							"value": "1197068888"
+							"key": "id",
+							"value": "1"
 						}
 					]
 				}
@@ -235,16 +193,17 @@
 					}
 				},
 				"url": {
-					"raw": "http://localhost:8083/api/clientes/jluro",
+					"raw": "http://localhost:8085/app/person/client/1",
 					"protocol": "http",
 					"host": [
 						"localhost"
 					],
-					"port": "8083",
+					"port": "8085",
 					"path": [
-						"api",
-						"clientes",
-						"jluro"
+						"app",
+						"person",
+						"client",
+						"1"
 					]
 				}
 			},

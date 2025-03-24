@@ -195,15 +195,15 @@
 				"method": "GET",
 				"header": [],
 				"url": {
-					"raw": "http://localhost:8086/app/account",
+					"raw": "http://localhost:8081/app/accounts",
 					"protocol": "http",
 					"host": [
 						"localhost"
 					],
-					"port": "8086",
+					"port": "8081",
 					"path": [
 						"app",
-						"account"
+						"accounts"
 					]
 				}
 			},
@@ -215,12 +215,12 @@
 				"method": "GET",
 				"header": [],
 				"url": {
-					"raw": "http://localhost:8086/app/reports?startDate=2025-02-20&endDate=2025-02-26&idClient=1",
+					"raw": "http://localhost:8081/app/reports?startDate=2025-03-20&endDate=2025-03-23&idClient=1",
 					"protocol": "http",
 					"host": [
 						"localhost"
 					],
-					"port": "8086",
+					"port": "8081",
 					"path": [
 						"app",
 						"reports"
@@ -228,11 +228,11 @@
 					"query": [
 						{
 							"key": "startDate",
-							"value": "2025-02-20"
+							"value": "2025-03-20"
 						},
 						{
 							"key": "endDate",
-							"value": "2025-02-26"
+							"value": "2025-03-23"
 						},
 						{
 							"key": "idClient",
@@ -284,12 +284,12 @@
 				"method": "GET",
 				"header": [],
 				"url": {
-					"raw": "http://localhost:8086/app/reports/pdf?startDate=2025-02-20&endDate=2025-02-26&idClient=1",
+					"raw": "http://localhost:8081/app/reports/pdf?startDate=2025-02-20&endDate=2025-02-26&client=1",
 					"protocol": "http",
 					"host": [
 						"localhost"
 					],
-					"port": "8086",
+					"port": "8081",
 					"path": [
 						"app",
 						"reports",
@@ -305,7 +305,7 @@
 							"value": "2025-02-26"
 						},
 						{
-							"key": "idClient",
+							"key": "client",
 							"value": "1"
 						}
 					]
@@ -386,7 +386,7 @@
 					}
 				},
 				"url": {
-					"raw": "http://localhost:8086/app/accounts/:id",
+					"raw": "http://localhost:8086/app/account/number/:accountNumber",
 					"protocol": "http",
 					"host": [
 						"localhost"
@@ -394,13 +394,14 @@
 					"port": "8086",
 					"path": [
 						"app",
-						"accounts",
-						":id"
+						"account",
+						"number",
+						":accountNumber"
 					],
 					"variable": [
 						{
-							"key": "id",
-							"value": "1"
+							"key": "accountNumber",
+							"value": "123456"
 						}
 					]
 				}
